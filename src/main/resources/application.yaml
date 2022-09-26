@@ -1,0 +1,52 @@
+dubbo:
+  application:
+    name: common.log.scholar_of_yore
+  protocol:
+    name: dubbo
+    port: -1
+  registry:
+    id: zk-registry
+    address: zookeeper://120.46.194.37:2181
+  config-center:
+    address: zookeeper://120.46.194.37:2181
+  metadata-report:
+    address: zookeeper://120.46.194.37:2181
+
+server:
+  port: 8080
+
+spring:
+  kafka:
+    bootstrap-servers: 120.46.194.37:9092
+#    producer: # 生产者
+#      retries: 3 # 设置大于0的值，则客户端会将发送失败的记录重新发送
+#      batch-size: 16384
+#      buffer-memory: 33554432
+#      acks: 1
+#      # 指定消息key和消息体的编解码方式
+#      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+#      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      group-id: scholar-of-yore
+      enable-auto-commit: true
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    listener:
+      # 当每一条记录被消费者监听器（ListenerConsumer）处理之后提交
+      # RECORD
+      # 当每一批poll()的数据被消费者监听器（ListenerConsumer）处理之后提交
+      # BATCH
+      # 当每一批poll()的数据被消费者监听器（ListenerConsumer）处理之后，距离上次提交时间大于TIME时提交
+      # TIME
+      # 当每一批poll()的数据被消费者监听器（ListenerConsumer）处理之后，被处理record数量大于等于COUNT时提交
+      # COUNT
+      # TIME |　COUNT　有一个条件满足时提交
+      # COUNT_TIME
+      # 当每一批poll()的数据被消费者监听器（ListenerConsumer）处理之后, 手动调用Acknowledgment.acknowledge()后提交
+      # MANUAL
+      # 手动调用Acknowledgment.acknowledge()后立即提交，一般使用这种
+      # MANUAL_IMMEDIATE
+      #ps, 日志服务对于消息一致性要求不高, 但数目众多, 因此有限保证性能
+      ack-mode: count_time
+      ack-time: 1000ms
+      ack-count: 1000
