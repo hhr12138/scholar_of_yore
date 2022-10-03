@@ -4,13 +4,17 @@ dubbo:
   protocol:
     name: dubbo
     port: -1
+    optimizer: common.storage.king.config.SerializationOptimizerImpl
   registry:
     id: zk-registry
     address: zookeeper://120.46.194.37:2181
+    check: false
   config-center:
     address: zookeeper://120.46.194.37:2181
   metadata-report:
     address: zookeeper://120.46.194.37:2181
+  consumer:
+    check: false
 
 server:
   port: 8080
@@ -31,6 +35,7 @@ spring:
       enable-auto-commit: true
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      bootstrap-servers: 120.46.194.37:9092
     listener:
       # 当每一条记录被消费者监听器（ListenerConsumer）处理之后提交
       # RECORD
@@ -50,3 +55,6 @@ spring:
       ack-mode: count_time
       ack-time: 1000ms
       ack-count: 1000
+app:
+  workId: 0
+  datacenterId: 1
